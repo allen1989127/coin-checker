@@ -40,8 +40,7 @@ class OkxProInfoChecker(OkxChecker):
     def __get_header(self, method, request_path, body):
         return {
             'OK-ACCESS-KEY': self.api_key,
-            'OK-ACCESS-SIGN': self.__signature(self.timestamp, method, request_path, body,
-                                               self.secret_key),
+            'OK-ACCESS-SIGN': self.__signature(method, request_path, body),
             'OK-ACCESS-TIMESTAMP': self.timestamp,
             'OK-ACCESS-PASSPHRASE': self.pass_phrase,
         }
