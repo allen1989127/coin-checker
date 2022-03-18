@@ -42,7 +42,7 @@ class OkxProInfoChecker(OkxChecker):
             'OK-ACCESS-KEY': self.api_key,
             'OK-ACCESS-SIGN': self.__signature(method, request_path, body),
             'OK-ACCESS-TIMESTAMP': self.timestamp,
-            'OK-ACCESS-PASSPHRASE': self.pass_phrase,
+            'OK-ACCESS-PASSPHRASE': self.phrase,
         }
 
     def request(self, **kwargs):
