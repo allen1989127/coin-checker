@@ -1,6 +1,7 @@
 # -*- coding=utf-8 -*-
 import base64
 import hmac
+
 import requests
 from abc import ABCMeta, abstractmethod
 
@@ -48,7 +49,7 @@ class OkxProInfoChecker(OkxChecker):
             'OK-ACCESS-PASSPHRASE': self.phrase,
         }
 
-    def request(self) -> dict | None:
+    def request(self) -> dict:
         self.timestamp = loop.get_timestamp()
 
         body = '{'

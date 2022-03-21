@@ -1,10 +1,15 @@
 # -*-coding=utf-8-*-
 import datetime
 import time
+import logging
 
 from action.checker import OkxChecker, OkxProInfoChecker
 from action.sender import MailSender
 from common import constants, config
+
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 def get_timestamp():
@@ -22,10 +27,12 @@ class RunMan:
 
     def run(self):
         data = self.checker.request()
-        if data is None or data['code'] != constants.CODE_SUCCESS:
+        logger.info("checker request data")
+        logger.info(str(data))
+        if data is None or int(data['code']) != constants.CODE_SUCCESS:
             return
 
-        sender = MailSender(data['data'], self.price, self.to_addr)
+        sender = MailSender(data['data'][0], self.price, self.to_addr)
         next_check = sender.do(self.check)
         self.check = next_check
 
