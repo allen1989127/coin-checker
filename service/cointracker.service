@@ -2,6 +2,7 @@
 Description=coin-tracker
 
 [Service]
+WorkingDirectory=/root/coin-checker
 Type=simple
 ExecStart="/usr/bin/python3" "/root/coin-checker/main.py"
 ExecReload=/bin/kill -HUP $MAINPID
