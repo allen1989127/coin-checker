@@ -1,5 +1,5 @@
-TAG_API_KEY = 'api_key'
-TAG_SECRET_KEY = 'secret_key'
-TAG_PHRASE = 'phrase'
-
 INTERVAL = 5
+
+CODE_SUCCESS = 0
+TAG_LAST_PRICE = 'last'
+TAG_INST_ID = 'instId'

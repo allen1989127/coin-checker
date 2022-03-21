@@ -4,29 +4,31 @@ import hmac
 import requests
 from abc import ABCMeta, abstractmethod
 
+from common import loop
+
 
 class OkxChecker:
     __metaclass__ = ABCMeta
 
     API_PATH = 'https://www.okx.com'
 
-    def __init__(self, api_key, secret_key, phrase, timestamp):
+    def __init__(self, api_key, secret_key, phrase):
         self.api_key = api_key
         self.secret_key = secret_key
         self.phrase = phrase
-        self.timestamp = timestamp
 
     @abstractmethod
-    def request(self):
+    def request(self) -> dict:
         pass
 
 
 class OkxProInfoChecker(OkxChecker):
     METHOD = 'GET'
-    REQUEST_PATH = '/api/v5/market/tickers'
+    REQUEST_PATH = '/api/v5/market/ticker'
 
-    def __init__(self, api_key: str, secret_key: str, phrase: str, timestamp: str, params: dict):
-        super().__init__(api_key, secret_key, phrase, timestamp)
+    def __init__(self, api_key: str, secret_key: str, phrase: str, params: dict):
+        super().__init__(api_key, secret_key, phrase)
+        self.timestamp = ''
         self.params = params
         self.url = OkxChecker.API_PATH + OkxProInfoChecker.REQUEST_PATH
 
@@ -46,7 +48,9 @@ class OkxProInfoChecker(OkxChecker):
             'OK-ACCESS-PASSPHRASE': self.phrase,
         }
 
-    def request(self):
+    def request(self) -> dict | None:
+        self.timestamp = loop.get_timestamp()
+
         body = '{'
         params = {}
         for key, value in self.params.items():

@@ -1,5 +1,15 @@
 {
   "api_key": "",
   "secret_key": "",
-  "phrase": ""
+  "phrase": "",
+  "smtp_server": "",
+  "from_addr": "",
+  "password": "",
+  "pieces": [
+    {
+      "inst_id": "",
+      "price": 0,
+      "to_addr": ""
+    }
+  ]
 }
