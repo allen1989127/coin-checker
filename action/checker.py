@@ -10,14 +10,15 @@ class OkxChecker:
 
     API_PATH = 'https://www.okx.com'
 
-    def __init__(self, api_key, secret_key, phrase, timestamp):
+    def __init__(self, api_key, secret_key, phrase, timestamp, params):
         self.api_key = api_key
         self.secret_key = secret_key
         self.phrase = phrase
         self.timestamp = timestamp
+        self.params = params
 
     @abstractmethod
-    def request(self, **kwargs):
+    def request(self):
         pass
 
 
@@ -25,8 +26,8 @@ class OkxProInfoChecker(OkxChecker):
     METHOD = 'GET'
     REQUEST_PATH = '/api/v5/market/tickers'
 
-    def __init__(self, api_key, secret_key, phrase, timestamp):
-        super().__init__(api_key, secret_key, phrase, timestamp)
+    def __init__(self, api_key, secret_key, phrase, timestamp, params):
+        super().__init__(api_key, secret_key, phrase, timestamp, params)
         self.url = OkxChecker.API_PATH + OkxProInfoChecker.REQUEST_PATH
 
     def __signature(self, method, request_path, body):
@@ -45,10 +46,10 @@ class OkxProInfoChecker(OkxChecker):
             'OK-ACCESS-PASSPHRASE': self.phrase,
         }
 
-    def request(self, **kwargs):
+    def request(self):
         body = '{'
         params = {}
-        for key, value in kwargs.items():
+        for key, value in self.params.items():
             body += '"'
             body += key
             body += '":"'
@@ -60,4 +61,12 @@ class OkxProInfoChecker(OkxChecker):
             body = body[:-1]
         body += '}'
         headers = self.__get_header(OkxProInfoChecker.METHOD, OkxProInfoChecker.REQUEST_PATH, body)
-        return requests.get(url=self.url, params=params, headers=headers).json()
+
+        try:
+            return requests.get(url=self.url, params=params, headers=headers).json()
+        except requests.exceptions.HTTPError as e:
+            return None
+        except requests.exceptions.ConnectionError as e:
+            return None
+        except requests.exceptions.RequestException as e:
+            return None
