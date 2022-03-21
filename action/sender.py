@@ -27,15 +27,27 @@ class MailSender:
         server.login(from_addr, password)
 
         msg_str = 'Hi there\nThe price of ' + self.data[constants.TAG_INST_ID] + ' is '
-        if last_price > self.price:
+        if last_price > self.price * 1.1:
+            msg_str += 'above 10% of '
+            code = constants.ABOVE_TEN_PERCENT
+        elif self.price * 1.05 < last_price <= self.price:
+            msg_str += 'above 5% of '
+            code = constants.ABOVE_FIVE_PERCENT
+        elif self.price < last_price <= self.price * 1.05:
             msg_str += 'above '
-            code = 1
-        elif last_price < self.price:
+            code = constants.ABOVE
+        elif self.price * 0.95 <= last_price < self.price:
             msg_str += 'below '
-            code = -1
+            code = constants.ABOVE
+        elif self.price * 0.9 <= last_price < self.price * 0.95:
+            msg_str += 'below 5% of '
+            code = constants.ABOVE_FIVE_PERCENT
+        elif last_price < self.price * 0.9:
+            msg_str += 'below 10% of '
+            code = constants.ABOVE_TEN_PERCENT
         else:
             msg_str += 'equal '
-            code = 0
+            code = constants.EQUAL
         msg_str += str(self.price)
         msg_str += '\n'
 
@@ -48,9 +60,19 @@ class MailSender:
 
     def do(self, check):
         last_price = float(self.data[constants.TAG_LAST_PRICE])
-        if check > 0 and last_price > self.price:
-            return 1
-        if check < 0 and last_price < self.price:
-            return -1
+        if check == constants.ABOVE_TEN_PERCENT and last_price > self.price * 1.1:
+            return constants.ABOVE_TEN_PERCENT
+        if check == constants.ABOVE_FIVE_PERCENT and (self.price * 1.05 < last_price <= self.price * 1.1):
+            return constants.ABOVE_FIVE_PERCENT
+        if check == constants.ABOVE and (self.price < last_price <= self.price * 1.05):
+            return constants.ABOVE
+        if check == constants.EQUAL and self.price == last_price:
+            return constants.EQUAL
+        if check == constants.BELOW and (self.price * 0.95 <= last_price < self.price):
+            return constants.BELOW
+        if check == constants.BELOW_FIVE_PERCENT and (self.price * 0.9 <= last_price < self.price * 0.95):
+            return constants.BELOW_FIVE_PERCENT
+        if check == constants.BELOW_TEN_PERCENT and last_price < self.price * 0.9:
+            return constants.BELOW_TEN_PERCENT
 
         return self.__send(last_price)
