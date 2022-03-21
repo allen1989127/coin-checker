@@ -10,12 +10,11 @@ class OkxChecker:
 
     API_PATH = 'https://www.okx.com'
 
-    def __init__(self, api_key, secret_key, phrase, timestamp, params):
+    def __init__(self, api_key, secret_key, phrase, timestamp):
         self.api_key = api_key
         self.secret_key = secret_key
         self.phrase = phrase
         self.timestamp = timestamp
-        self.params = params
 
     @abstractmethod
     def request(self):
@@ -26,8 +25,9 @@ class OkxProInfoChecker(OkxChecker):
     METHOD = 'GET'
     REQUEST_PATH = '/api/v5/market/tickers'
 
-    def __init__(self, api_key, secret_key, phrase, timestamp, params):
-        super().__init__(api_key, secret_key, phrase, timestamp, params)
+    def __init__(self, api_key: str, secret_key: str, phrase: str, timestamp: str, params: dict):
+        super().__init__(api_key, secret_key, phrase, timestamp)
+        self.params = params
         self.url = OkxChecker.API_PATH + OkxProInfoChecker.REQUEST_PATH
 
     def __signature(self, method, request_path, body):

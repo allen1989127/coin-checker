@@ -2,7 +2,6 @@
 import datetime
 import json
 
-from action.runer import RunMan
 from common import constants
 
 from action.checker import OkxProInfoChecker
@@ -26,12 +25,10 @@ def main():
     secret_key = params[constants.TAG_SECRET_KEY]
     phrase = params[constants.TAG_PHRASE]
 
-    runmen = []
     timestamp = get_timestamp()
-    checker = OkxProInfoChecker(api_key, secret_key, phrase, timestamp, {'instType': 'SPOT'})
-    ok_runman = RunMan(checker)
-    runmen.append(ok_runman)
-    looper = Looper(5, runmen)
+    check_params = {'instId': 'ETH-USTD'}
+    checker = OkxProInfoChecker(api_key, secret_key, phrase, timestamp, check_params)
+    looper = Looper(5, checker)
 
     looper.loop()
 
