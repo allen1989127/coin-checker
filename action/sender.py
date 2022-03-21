@@ -38,13 +38,13 @@ class MailSender:
             code = constants.ABOVE
         elif self.price * 0.95 <= last_price < self.price:
             msg_str += 'below '
-            code = constants.ABOVE
+            code = constants.BELOW
         elif self.price * 0.9 <= last_price < self.price * 0.95:
             msg_str += 'below 5% of '
-            code = constants.ABOVE_FIVE_PERCENT
+            code = constants.BELOW_FIVE_PERCENT
         elif last_price < self.price * 0.9:
             msg_str += 'below 10% of '
-            code = constants.ABOVE_TEN_PERCENT
+            code = constants.BELOW_TEN_PERCENT
         else:
             msg_str += 'equal '
             code = constants.EQUAL
