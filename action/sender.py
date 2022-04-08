@@ -30,7 +30,7 @@ class MailSender:
         if last_price > self.price * 1.1:
             msg_str += 'above 10% of '
             code = constants.ABOVE_TEN_PERCENT
-        elif self.price * 1.05 < last_price <= self.price:
+        elif self.price * 1.05 < last_price <= self.price * 1.1:
             msg_str += 'above 5% of '
             code = constants.ABOVE_FIVE_PERCENT
         elif self.price < last_price <= self.price * 1.05:
